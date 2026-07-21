@@ -12,5 +12,8 @@ dependencies = ["numpy>=1.24", "pandas>=2.0", "matplotlib>=3.7", "scipy>=1.10", 
 [project.optional-dependencies]
 test = ["pytest>=7.0"]
 
+[tool.setuptools]
+packages = ["portfolio_risk"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
