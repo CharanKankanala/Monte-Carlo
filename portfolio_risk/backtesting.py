@@ -58,6 +58,8 @@ def walk_forward_backtest(prices: pd.DataFrame, lookback: int = 504,
             turnover = float(np.abs(w - old).sum())
             cost = turnover * (transaction_cost_bps + liquidity_stress_bps) / 10_000
             segment = returns.iloc[start:stop].to_numpy() @ w
+            # The rebalance is one trade at the segment boundary, so the full
+            # cost hits the first holding-period return rather than every day.
             if len(segment): segment[0] -= cost
             daily.loc[returns.index[start:stop], strategy] = segment
             weights_records.append({"date": returns.index[start], "strategy": strategy, **dict(zip(returns.columns, w))})
@@ -66,4 +68,3 @@ def walk_forward_backtest(prices: pd.DataFrame, lookback: int = 504,
     for name, allocation in BENCHMARKS.items():
         daily[name] = sum(returns.loc[daily.index, ticker] * weight for ticker, weight in allocation.items())
     return daily.dropna(), pd.DataFrame(weights_records), pd.DataFrame(turnover_records)
-

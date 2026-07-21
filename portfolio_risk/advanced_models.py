@@ -58,6 +58,8 @@ def fit_two_state_regime(series: np.ndarray, iterations: int = 100) -> RegimeFit
     gamma = np.full((len(x), 2), .5)
     for _ in range(iterations):
         emit = np.column_stack([norm.pdf(x, means[j], np.sqrt(variances[j])) for j in range(2)]) + 1e-300
+        # Scaling prevents a long forward-backward recursion from underflowing
+        # to zero while leaving the EM state probabilities unchanged.
         alpha = np.empty_like(emit); scale = np.empty(len(x))
         alpha[0] = .5 * emit[0]; scale[0] = alpha[0].sum(); alpha[0] /= scale[0]
         for i in range(1, len(x)):
@@ -96,6 +98,8 @@ def simulate_garch_regime_copula(returns: pd.DataFrame, weights: np.ndarray,
                                   seed: int = 42, initial_value: float = 100_000,
                                   degrees_freedom: int = 6) -> np.ndarray:
     """Simulate a portfolio with dynamic GARCH variance, latent regimes, and t-copula shocks."""
+    # The default of six t degrees of freedom gives heavier joint tails than a
+    # Gaussian while retaining finite variance and stable calibration here.
     rng = np.random.default_rng(seed)
     x = returns.to_numpy(); n_assets = x.shape[1]
     fits = [fit_garch11(x[:, j]) for j in range(n_assets)]
