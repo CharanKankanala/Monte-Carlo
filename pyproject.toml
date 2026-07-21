@@ -7,11 +7,10 @@ name = "monte-carlo-portfolio-risk"
 version = "1.0.0"
 description = "Reproducible Monte Carlo portfolio risk analytics"
 requires-python = ">=3.10"
-dependencies = ["numpy>=1.24", "pandas>=2.0", "matplotlib>=3.7", "scipy>=1.10"]
+dependencies = ["numpy>=1.24", "pandas>=2.0", "matplotlib>=3.7", "scipy>=1.10", "yfinance>=0.2.54"]
 
 [project.optional-dependencies]
 test = ["pytest>=7.0"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-

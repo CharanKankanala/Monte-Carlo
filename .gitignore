@@ -3,4 +3,8 @@ __pycache__/
 .pytest_cache/
 .venv/
 outputs/
-
+research_outputs/
+dashboard/node_modules/
+dashboard/.vinext/
+dashboard/dist/
+.pnpm-store/
